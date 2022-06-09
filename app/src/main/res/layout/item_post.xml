@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/opTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/op"
+        android:layout_marginStart="16dp"
+        android:visibility="gone"
+        tools:visibility="visible"/>
+
+
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/card_backgound"
+        app:strokeColor="@color/black"
+        app:strokeWidth="2dp"
+        android:layout_marginBottom="12dp"
+        app:cardElevation="8dp"
+        app:cardCornerRadius="25dp">
+
+        <RelativeLayout
+            android:id="@+id/postItemMainLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.makeramen.roundedimageview.RoundedImageView
+                android:id="@+id/avatarRoundedImageView"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_margin="6dp"
+                android:backgroundTint="@color/cardview_dark_background"
+                android:src="@drawable/icon_app_round"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                app:riv_corner_radius="50dp" />
+
+            <ImageView
+                android:id="@+id/editBtn"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_margin="6dp"
+                android:src="@drawable/btn_edit_green_round"
+                android:layout_toRightOf="@id/postCountLayout"
+                android:visibility="gone"
+                tools:visibility="visible"/>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/btnLike"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_margin="6dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true">
+
+
+                <ImageView
+                    android:id="@+id/btnLikeImageView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginEnd="8dp"
+
+                    android:src="@drawable/btn_like_inactive"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+                <TextView
+                    android:id="@+id/likesCounterTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:fontFamily="@font/anton"
+                    android:paddingStart="16sp"
+                    android:paddingTop="13sp"
+                    android:text="1"
+                    android:textColor="@color/light_black"
+                    android:textSize="13sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <TextView
+                android:id="@+id/usernameTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="4dp"
+                android:text="Julian Sørensen"
+                android:textSize="20sp"
+                android:layout_toRightOf="@id/avatarRoundedImageView" />
+
+            <RelativeLayout
+                android:id="@+id/postCountLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="8dp"
+                android:layout_toRightOf="@id/usernameTextView">
+
+                <ImageView
+                    android:id="@+id/greenSpeechBubble"
+                    android:layout_width="35dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/icon_speechbubble_rust_green"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+                <TextView
+                    android:id="@+id/postCountTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:paddingBottom="4dp"
+                    android:text="1211"
+                    android:textColor="@color/white"
+                    android:textSize="10sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/createdAtTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:text="28/4 2022"
+                android:layout_below="@id/usernameTextView"
+                android:layout_toRightOf="@id/avatarRoundedImageView"/>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/quoteCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="12dp"
+                android:layout_marginStart="12dp"
+                android:layout_below="@+id/avatarRoundedImageView"
+                android:layout_centerHorizontal="true"
+                app:strokeColor="@color/card_btn_background"
+                app:strokeWidth="2dp">
+
+                <LinearLayout
+                    android:id="@+id/quoteContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+
+                    android:visibility="gone"
+                    tools:visibility="visible">
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:id="@+id/contentTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="12dp"
+                android:fontFamily="@font/heebo"
+                android:linksClickable="true"
+                android:text="Dette er en post\nPå mange linjer"
+                android:textColor="@color/black"
+                android:layout_below="@id/quoteCard"
+                android:layout_centerHorizontal="true"
+                 />
+
+            <EditText
+                android:id="@+id/editText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxHeight="300dp"
+                android:layout_margin="12dp"
+                android:visibility="gone"
+                tools:visibility="visible"
+                android:layout_below="@id/quoteCard"
+                android:layout_centerInParent="true"/>
+
+
+        </RelativeLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+
+</LinearLayout>

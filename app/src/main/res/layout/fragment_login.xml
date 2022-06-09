@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/titleTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/alfa_slab_one"
+        android:text="@string/login"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        android:layout_marginTop="20dp"
+        />
+
+    <EditText
+        android:id="@+id/usernameEditTextView"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:layout_below="@+id/titleTextView"
+        android:layout_centerInParent="true" />
+
+    <TextView
+        android:id="@+id/usernameStringTextView"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/usernameEditTextView"
+        android:text="@string/username"
+        android:layout_centerInParent="true"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:textAlignment="center"/>
+
+    <EditText
+        android:id="@+id/passwordEditTextView"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:layout_below="@+id/usernameStringTextView"
+        android:layout_centerInParent="true"
+        android:inputType="textPassword"/>
+
+    <TextView
+        android:id="@+id/passwordStringTextView"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/passwordEditTextView"
+        android:layout_centerInParent="true"
+        android:text="@string/password"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:textAlignment="center"/>
+
+    <ImageButton
+        android:id="@+id/btnLogin"
+        android:layout_width="115dp"
+        android:layout_height="60dp"
+        android:layout_below="@id/passwordStringTextView"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/btn_login" />
+
+    <ImageButton
+        android:id="@+id/btnSignUp"
+        android:layout_width="115dp"
+        android:layout_height="60dp"
+        android:layout_below="@id/btnLogin"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/btn_sign_up_red_rust" />
+
+</RelativeLayout>

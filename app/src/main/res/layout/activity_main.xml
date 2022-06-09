@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.MainActivity">
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/main_host_fragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="80dp"
+        app:defaultNavHost="true"
+        app:layout_constraintBottom_toTopOf="@id/bottomAppBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navGraph="@navigation/main_nav_graph"
+        tools:layout="@layout/fragment_home" />
+
+
+
+    <com.google.android.material.bottomappbar.BottomAppBar
+        android:id="@+id/bottomAppBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+
+        app:contentInsetStart="0dp"
+        app:contentInsetEnd="0dp">
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottomNavigationView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="0dp"
+            android:background="@color/white"
+            app:menu="@menu/bottom_nav_menu" />
+
+    </com.google.android.material.bottomappbar.BottomAppBar>
+
+
+
+    <RelativeLayout
+        android:id="@+id/bottomNavRusty"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="@drawable/rust_red_texture"
+        android:layout_gravity="bottom">
+
+        <ImageView
+            android:id="@+id/navBtnHome"
+            android:layout_width="@dimen/nav_bottom_icon_height"
+            android:layout_height="@dimen/nav_bottom_icon_height"
+            android:src="@drawable/ic_baseline_home_24"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="@dimen/nav_bottom_outer_margin"
+            android:layout_centerInParent="true"
+             />
+
+        <ImageView
+            android:id="@+id/navBtnFeed"
+            android:layout_height="@dimen/nav_bottom_icon_height"
+            android:layout_width="@dimen/nav_bottom_icon_height"
+            android:src="@drawable/nav_icon_feed_passive"
+            android:scaleType="fitCenter"
+            android:backgroundTint="@null"
+            android:layout_centerInParent="true"
+            />
+
+
+        <ImageView
+            android:id="@+id/navBtnProfile"
+            android:layout_height="@dimen/nav_bottom_icon_height"
+            android:layout_width="@dimen/nav_bottom_icon_height"
+            android:src="@drawable/ic_baseline_person_24"
+
+            android:backgroundTint="@null"
+            android:layout_marginLeft="@dimen/nav_bottom_outer_margin"
+            android:layout_centerInParent="true"
+
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="@dimen/nav_bottom_outer_margin"
+            />
+
+
+    </RelativeLayout>
+
+
+
+
+
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
