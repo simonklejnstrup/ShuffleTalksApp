@@ -8,19 +8,11 @@ import com.example.shuffletalksapp.session.SessionManager
 class ProfileViewModel(private val repository: Repository): ViewModel() {
 
     private val sessionManager = SessionManager()
-
-
-
-    private val username = sessionManager.getUserDetails()?.get(sessionManager.KEY_USERNAME)
     private val userId = sessionManager.getUserDetails()?.get(sessionManager.KEY_USERID)
 
-    val user = username?.let { repository.getUserByUsername(it) }
-
-
-
-    val userUIModel = user?.let { toProfileUIModel(it) }
 
     fun toProfileUIModel(user: User): ProfileUIModel {
+
         return ProfileUIModel(
             user.avatar,
             user.postcount,
@@ -30,8 +22,16 @@ class ProfileViewModel(private val repository: Repository): ViewModel() {
             user.city,
             user.email
         )
-
     }
+
+    fun getUser(username: String): ProfileUIModel {
+        val user = repository.getUserByUsername(username)
+        if (user != null) {
+            return toProfileUIModel(user)
+        }
+        return ProfileUIModel()
+    }
+
 
     fun updateUser(newFirstname: String, newLastname: String, newEmail: String) {
         if (userId != null) {

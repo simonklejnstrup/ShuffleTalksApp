@@ -1,10 +1,12 @@
 package com.example.shuffletalksapp.ui.create_comment
 
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
@@ -31,6 +33,7 @@ class CreateCommentFragment: Fragment(R.layout.fragment_create_comment) {
     private val sessionManager = SessionManager()
 
     private lateinit var postId: String
+    private lateinit var itemUsername: String
     private lateinit var binding: FragmentCreateCommentBinding
 
     override fun onCreateView(
@@ -43,19 +46,30 @@ class CreateCommentFragment: Fragment(R.layout.fragment_create_comment) {
             binding = FragmentCreateCommentBinding.inflate(inflater)
         }
         postId = args.postId
+        itemUsername = args.itemUsername
         return binding.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        if (args.quotes != null) {
+            binding.titleTextView.text = getString(R.string.answering_user, itemUsername)
+        }
+
         binding.btnSubmit.setOnClickListener {
             if (binding.editText.text.trim().isEmpty()) {
                 Toast.makeText(context, "Indhold ikke udfyldt", Toast.LENGTH_SHORT).show()
             } else {
-                viewModel.createComment(binding.editText.text.toString())
+                viewModel.createComment(binding.editText.text.toString(), args.quotes)
                 val action = CreateCommentFragmentDirections.actionCreateCommentFragmentToPostFragment(postId)
                 findNavController().navigate(action)
             }
+        }
+
+        binding.btnBack.setOnClickListener {
+            activity?.onBackPressed()
         }
     }
 }

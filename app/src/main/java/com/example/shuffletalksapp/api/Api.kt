@@ -1,10 +1,12 @@
 package com.example.shuffletalksapp.api
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import com.example.shuffletalksapp.R
 import com.example.shuffletalksapp.model.*
 import com.example.shuffletalksapp.ui.post.PostItemUIModel
+import com.example.shuffletalksapp.util.Constants
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.*
@@ -30,7 +32,7 @@ object Api {
     }
 
     fun getUserByUsername(username: String): User? {
-        return users.find { user -> user.username == username }
+        return users.find { user -> user.username.equals(username, ignoreCase = true) }
 
 
     }
@@ -67,7 +69,7 @@ object Api {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun createComment(content: String, username: String, postId: String) {
+    fun createComment(content: String, username: String, postId: String, quotes: Array<Quote>?) {
         val user = getUserByUsername(username)
         val post = getOnePost(postId)
 
@@ -81,7 +83,7 @@ object Api {
                     ArrayList<Like>(),
                     LocalDate.now().toString(),
                     LocalDate.now().toString(),
-                    ArrayList<Quote>()
+                    (quotes?.toMutableList() ?: ArrayList<Quote>()) as ArrayList<Quote>
                 )
             )
             user.postcount += 1
@@ -90,8 +92,23 @@ object Api {
     }
 
     // post user
-    fun createUser(user: User) {
+    fun createUser(user: User): String {
+
+        val userByUsername = users.find { _user -> _user.username.equals(user.username, ignoreCase = true) }
+
+        if (user.username.equals(userByUsername?.username, ignoreCase = true)) {
+            return Constants.USERNAME_ALREADY_IN_USE_STRING
+        }
+
+        val userByEmail = users.find { _user -> _user.email.equals(user.email, ignoreCase = true) }
+
+        if (user.email.equals(userByEmail?.email, ignoreCase = true)) {
+            return Constants.EMAIL_ALREADY_IN_USE_STRING
+        }
+
         users.add(user)
+
+        return Constants.SUCCES_STRING
     }
 
     // Update
@@ -110,6 +127,31 @@ object Api {
 
         comment?.content = newContent
 
+    }
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    fun updateLikes(commentId: String, postId: String, _like: Like): Int {
+        val post = posts.find { post -> post.postId == postId }
+
+        if (post != null) {
+            val comment = post.comments.find { comment -> comment.commentId == commentId }
+
+            if (comment != null) {
+
+                val isLikedByCurrentUser = comment.likes.any { like -> like.userId == _like.userId}
+                if (isLikedByCurrentUser) {
+                    comment.likes.removeIf { it.userId == _like.userId }
+                } else {
+                    comment.likes.add(_like)
+                    println(comment.likes)
+                }
+
+                return comment.likes.size
+
+            }
+
+        }
+        return -1
     }
 
 
@@ -210,7 +252,7 @@ object Api {
                     "628e3c0ef24148cf460a1671",
                     "SpørgeSøren",
                     "Jeg kan godt lide yamaha trommer",
-                    "628f6bb51081edec4463f291a",
+                    "628f6bb5hdhdhd1081edec4463f291a",
                     mutableListOf<Like>(
                         Like("628e3c0ef24148cf460a1677", "Janko")
                     ) as ArrayList<Like>,
@@ -222,7 +264,7 @@ object Api {
                     "628e3c0ef24148cf460a1674",
                     "hBusing",
                     "De er også fede ",
-                    "628f6bb51081edec4463f291",
+                    "628f6basasb51081edec4463f291",
                     mutableListOf<Like>(
                         Like("628e3c0ef24148cf460a1677", "Janko")
                     ) as ArrayList<Like>,
@@ -236,7 +278,7 @@ object Api {
                     "628e3c0ef24148cf460a1671",
                     "SpørgeSøren",
                     "ja, mit sæt er blåt",
-                    "628f6bb51081edec4463f291",
+                    "628f6bb51081edec4463f29112",
                     ArrayList<Like>(),
                     "2022-05-26",
                     "2022-05-26",
@@ -255,7 +297,7 @@ object Api {
                     "628e3c0ef24148cf460a1674",
                     "hBusing",
                     "Se mit nye, fede sæt",
-                    "628f6bb51081edec4463f291",
+                    "628f6basaasfvb51081edec4463f291",
                     ArrayList<Like>(),
                     "2022-05-26",
                     "2022-05-26",
@@ -265,7 +307,7 @@ object Api {
                     "628e3c0ef24148cf460a1677",
                     "Janko",
                     "Det er super flot!",
-                    "628f6bb51081edec4463f291",
+                    "628f6vdvfvabb51081edec4463f291",
                     ArrayList<Like>(),
                     "2022-05-26",
                     "2022-05-26",
@@ -281,7 +323,7 @@ object Api {
                     "628e3c0ef24148cf460a1676",
                     "imansyah",
                     "Hej medslagere. Der ligger en fin dokumentar om Mavis Staples på dr.dk - én af mine store helte. Især er hendes nyere plader mig en stor inspiration ift produktion etc. Derudover er hele hendes historie særdeles spændende. Hermed en stor anbefaling!",
-                    "628f6bb51081edec4463f291",
+                    "628f6bbiii51081edec4463f291",
                     ArrayList<Like>(),
                     "2022-05-26",
                     "2022-05-26",
@@ -291,7 +333,7 @@ object Api {
                     "628e3c0ef24148cf460a1677",
                     "Janko",
                     "Se mit nye, fede sæt EDIT",
-                    "628f6bb51081edec4463f291",
+                    "628f6bb51080981edec4463f291",
                     ArrayList<Like>(),
                     "2022-05-26",
                     "2022-05-26",
@@ -316,7 +358,7 @@ object Api {
                             "Jeg har haft timer hos et par prof'er hist og pist, men oftest tager de den bare på rutinen og hyggesludrer for resten. For mig, giver det ikke meget mere, end at læse et nummer af modern drummer. Det er bare en del dyrere.....\n" +
                             "\n" +
                             "Nogen bud på en god kandidat ? ",
-                    "628f6bb51081edec4463f291",
+                    "628f6bb510851515t1edec4463f291",
                     ArrayList<Like>(),
                     "2022-05-26",
                     "2022-05-26",
@@ -326,7 +368,7 @@ object Api {
                     "628e3c0ef24148cf460a1677",
                     "Janko",
                     "Se mit nye, fede sæt EDIT",
-                    "628f6bb51081edec4463f291",
+                    "628f6bb510hej81edec4463f291",
                     ArrayList<Like>(),
                     "2022-05-26",
                     "2022-05-26",
@@ -353,7 +395,7 @@ object Api {
                             " \n" +
                             "\n" +
                             "Har hørt, nogle har problemer med sved, som ødelægger ledninger og stik i Shure'ne - det har jeg aldrig oplevet. Har brugt samme in-ears i 5 år nu - måske omkring 100 jobs ...",
-                    "628f6bb51081edec4463f291",
+                    "628f6bb5108olle1edec4463f291",
                     ArrayList<Like>(),
                     "2022-05-26",
                     "2022-05-26",
@@ -363,7 +405,7 @@ object Api {
                     "628e3c0ef24148cf460a1677",
                     "Janko",
                     "Se mit nye, fede sæt EDIT",
-                    "628f6bb51081edec4463f291",
+                    "628f6bb8751081edec4463f291",
                     ArrayList<Like>(),
                     "2022-05-26",
                     "2022-05-26",

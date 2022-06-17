@@ -18,7 +18,7 @@ import com.example.shuffletalksapp.model.User
 import com.example.shuffletalksapp.repository.Repository
 import com.example.shuffletalksapp.util.Constants
 
-class SignUpFragment: Fragment(R.layout.fragment_sign_up) {
+class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
 
     private val viewModel: SignUpViewModel by viewModels {
         SignUpViewModelFactory(Repository())
@@ -26,7 +26,11 @@ class SignUpFragment: Fragment(R.layout.fragment_sign_up) {
 
     private lateinit var binding: FragmentSignUpBinding
 
-    override fun onCreateView( inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         super.onCreateView(inflater, container, savedInstanceState)
         if (!::binding.isInitialized) {
             binding = FragmentSignUpBinding.inflate(inflater)
@@ -37,6 +41,7 @@ class SignUpFragment: Fragment(R.layout.fragment_sign_up) {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         binding.fab.setOnClickListener {
             val username = binding.usernameEditText.text.toString()
             val firstname = binding.firstnameEditText.text.toString()
@@ -45,16 +50,28 @@ class SignUpFragment: Fragment(R.layout.fragment_sign_up) {
             val city = binding.cityEditText.text.toString()
             val password = binding.passwordEditText.text.toString()
 
-            viewModel.createUser(username, firstname, lastname, email, city, password)
+            val dbResponse = viewModel.createUser(username, firstname, lastname, email, city, password)
 
-            Toast.makeText(view.context, "Bruger $username oprettet", Toast.LENGTH_SHORT).show()
+            when (dbResponse) {
 
-            Handler(Looper.getMainLooper()).postDelayed({
-                findNavController().navigate(R.id.loginFragment)
-            }, 2000)
+                Constants.USERNAME_ALREADY_IN_USE_STRING ->
+                    Toast.makeText(view.context, "Bruger allerede i brug", Toast.LENGTH_SHORT).show()
 
+                Constants.EMAIL_ALREADY_IN_USE_STRING ->
+                    Toast.makeText(view.context, "Email allerede i brug", Toast.LENGTH_SHORT).show()
 
-
+                Constants.SUCCES_STRING -> {
+                    Toast.makeText(view.context, "Bruger $username oprettet", Toast.LENGTH_SHORT).show()
+                    navigateToLoginWithDelay(username)
+                }
             }
         }
     }
+
+    private fun navigateToLoginWithDelay(username: String) {
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            findNavController().navigate(R.id.loginFragment)
+        }, 2000)
+    }
+}

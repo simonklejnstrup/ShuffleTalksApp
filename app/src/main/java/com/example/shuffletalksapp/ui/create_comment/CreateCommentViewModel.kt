@@ -1,22 +1,21 @@
 package com.example.shuffletalksapp.ui.create_comment
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
-import androidx.navigation.NavController
-import com.example.shuffletalksapp.R
-import com.example.shuffletalksapp.model.Post
+import com.example.shuffletalksapp.model.Quote
 import com.example.shuffletalksapp.repository.Repository
 import com.example.shuffletalksapp.session.SessionManager
-import com.example.shuffletalksapp.ui.feed.FeedRecyclerViewAdapter
-import com.example.shuffletalksapp.ui.feed.FeedViewModel
 
 class CreateCommentViewModel(private val repository: Repository, private val postId: String): ViewModel() {
 
     private val sessionManager = SessionManager()
 
-    fun createComment(content: String) {
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun createComment(content: String, quotes: Array<Quote>?) {
         val username = sessionManager.getUserDetails()?.get(sessionManager.KEY_USERNAME)
         if (username != null) {
-            repository.createComment(content, username, postId)
+            repository.createComment(content, username, postId, quotes)
 
         }
     }

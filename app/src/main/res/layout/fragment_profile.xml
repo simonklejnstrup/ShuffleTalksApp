@@ -7,6 +7,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:layout="@layout/fragment_home">
 
+    <ImageButton
+        android:id="@+id/btnBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="27dp"
+        android:layout_marginStart="12dp"
+        android:src="@drawable/ic_baseline_arrow_back_24"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"/>
+
     <com.makeramen.roundedimageview.RoundedImageView
         android:id="@+id/avatarRoundedImageView"
         android:layout_width="150dp"
@@ -53,7 +64,7 @@
         android:layout_below="@id/postCountLayout"
         android:layout_centerInParent="true"
         android:layout_marginTop="10dp"
-        android:text="Fornavn: "
+        android:text="Fornavn"
         android:textSize="15dp"
         android:textStyle="bold" />
 
@@ -74,7 +85,7 @@
         android:layout_below="@id/firstnameTextView"
         android:layout_centerInParent="true"
         android:layout_marginTop="10dp"
-        android:text="Efternavn:"
+        android:text="Efternavn"
         android:textSize="15dp"
         android:textStyle="bold" />
 
@@ -95,7 +106,7 @@
         android:layout_below="@id/lastnameTextView"
         android:layout_centerInParent="true"
         android:layout_marginTop="10dp"
-        android:text="Brugernavn:"
+        android:text="Brugernavn"
         android:textSize="15dp"
         android:textStyle="bold" />
 
@@ -116,7 +127,7 @@
         android:layout_below="@id/usernameTextView"
         android:layout_centerInParent="true"
         android:layout_marginTop="10dp"
-        android:text="Brugernavn:"
+        android:text="@string/email"
         android:textSize="15dp"
         android:textStyle="bold" />
 

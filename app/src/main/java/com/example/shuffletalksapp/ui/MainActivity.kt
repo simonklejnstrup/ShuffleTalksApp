@@ -1,6 +1,9 @@
 package com.example.shuffletalksapp.ui
 
+import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
+import android.view.WindowManager
 import androidx.fragment.app.FragmentActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -26,10 +29,15 @@ class MainActivity : FragmentActivity() {
         initNavController()
 
 
+
+
+
+
     }
 
     override fun onStart() {
         super.onStart()
+
 
         navHostFragment = supportFragmentManager.findFragmentById(R.id.main_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
@@ -42,7 +50,9 @@ class MainActivity : FragmentActivity() {
                 navController.navigate(R.id.feedFragment)
             }
             navBtnProfile.setOnClickListener {
+
                 if (sessionManager.isLoggedIn()) {
+
                     navController.navigate(R.id.profileFragment)
                 } else {
                     navController.navigate(R.id.loginFragment)
@@ -62,7 +72,7 @@ class MainActivity : FragmentActivity() {
     }
 
 
-    // REtrofit stuff
+    // Retrofit stuff
     /*
     override fun onCreate(savedInstanceState: Bundle?) {
 

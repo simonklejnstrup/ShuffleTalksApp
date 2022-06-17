@@ -9,6 +9,9 @@ class Constants {
         const val NO_USER_STRING = "no_user"
         const val WRONG_PASS_STRING = "wrong_pass"
 
+        const val USERNAME_ALREADY_IN_USE_STRING = "username_already_in_use"
+        const val EMAIL_ALREADY_IN_USE_STRING = "email_already_in_use"
+
     }
 
 }

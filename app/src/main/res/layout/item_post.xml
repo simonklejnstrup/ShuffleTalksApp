@@ -55,19 +55,18 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/btnLike"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:layout_margin="6dp"
+                android:layout_width="65dp"
+                android:layout_height="65dp"
+                android:layout_marginEnd="6dp"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true">
 
 
                 <ImageView
                     android:id="@+id/btnLikeImageView"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="2dp"
-                    android:layout_marginEnd="8dp"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+
 
                     android:src="@drawable/btn_like_inactive"
                     app:layout_constraintTop_toTopOf="parent"
@@ -75,21 +74,35 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"/>
 
-                <TextView
-                    android:id="@+id/likesCounterTextView"
+                <RelativeLayout
+                    android:id="@+id/likesCounterLayout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_centerVertical="true"
-                    android:fontFamily="@font/anton"
-                    android:paddingStart="16sp"
-                    android:paddingTop="13sp"
-                    android:text="1"
-                    android:textColor="@color/light_black"
-                    android:textSize="13sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent">
+
+                    <ImageView
+                        android:id="@+id/LikeCounterImageview"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/circle_green_rust_filled"
+                        />
+
+                    <TextView
+                        android:id="@+id/likesCounterTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:text="1"
+                        android:textColor="@color/white"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </RelativeLayout>
+
+
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -161,7 +174,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
-
+                    android:paddingTop="5dp"
                     android:visibility="gone"
                     tools:visibility="visible">
 
@@ -178,6 +191,7 @@
                 android:linksClickable="true"
                 android:text="Dette er en post\nPå mange linjer"
                 android:textColor="@color/black"
+                android:textStyle="bold"
                 android:layout_below="@id/quoteCard"
                 android:layout_centerHorizontal="true"
                  />
@@ -186,12 +200,15 @@
                 android:id="@+id/editText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:maxHeight="300dp"
-                android:layout_margin="12dp"
-                android:visibility="gone"
-                tools:visibility="visible"
                 android:layout_below="@id/quoteCard"
-                android:layout_centerInParent="true"/>
+                android:layout_centerInParent="true"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="12dp"
+                android:layout_marginBottom="12dp"
+                android:maxHeight="300dp"
+                android:visibility="gone"
+                tools:visibility="visible" />
 
 
         </RelativeLayout>

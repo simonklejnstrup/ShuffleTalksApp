@@ -5,7 +5,9 @@ import android.view.ViewGroup
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.shuffletalksapp.R
 import com.example.shuffletalksapp.databinding.ItemFeedBinding
+import com.example.shuffletalksapp.util.GlobalApplication
 
 class FeedRecyclerViewAdapter(): RecyclerView.Adapter<FeedRecyclerViewAdapter.ViewHolder>() {
 
@@ -55,6 +57,8 @@ class FeedRecyclerViewAdapter(): RecyclerView.Adapter<FeedRecyclerViewAdapter.Vi
                 postCountTextView.text = model.postcount.toString()
                 createdAtTextView.text = model.createdAt
                 contentTextView.text = model.content
+                numberOfPostsTextView.text = GlobalApplication.getContext()?.getString(R.string.number_of_posts, model.commentCount - 1)
+
                 Glide.with(this.root)
                     .load(model.avatar)
                     .into(postBinding.avatarRoundedImageView)

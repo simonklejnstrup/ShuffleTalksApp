@@ -1,6 +1,7 @@
 package com.example.shuffletalksapp.ui.login
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -41,8 +42,12 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             val password = binding.passwordEditTextView.text.toString()
             val validationResponse = viewModel.validate(username, password)
 
+
+
             if (validationResponse.equals(Constants.SUCCES_STRING)) {
-                findNavController().navigate(R.id.profileFragment)
+                Log.d("1234", validationResponse)
+                val action = LoginFragmentDirections.actionLoginFragmentToProfileFragment(username)
+                findNavController().navigate(action)
             }
             if (validationResponse.equals(Constants.WRONG_PASS_STRING)) {
                 Toast.makeText(context, R.string.wrong_password, Toast.LENGTH_SHORT).show()

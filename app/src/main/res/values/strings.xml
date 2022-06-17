@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ShuffleTalksApp</string>
+    <string name="app_name">Shuffle Talks</string>
     <string name="home">Hjem</string>
     <string name="feed">Feed</string>
     <string name="profile">Profil</string>
@@ -22,6 +22,8 @@
     <string name="create_new_comment">Skriv kommentar</string>
     <string name="sign_up">Opret dig som bruger</string>
     <string name="city">By</string>
+    <string name="answering_user">Svarer %1$s</string>
+    <string name="number_of_posts">%1d svar</string>
 
 
 </resources>

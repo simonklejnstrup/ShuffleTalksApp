@@ -1,11 +1,13 @@
 package com.example.shuffletalksapp.ui.create_post
 
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -33,8 +35,10 @@ class CreatePostFragment: Fragment(R.layout.fragment_create_post) {
         return binding.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         binding.btnSubmit.setOnClickListener {
             if (binding.editText.text.trim().isEmpty()) {
                 Toast.makeText(context, "Indhold ikke udfyldt", Toast.LENGTH_SHORT).show()
@@ -43,6 +47,10 @@ class CreatePostFragment: Fragment(R.layout.fragment_create_post) {
                 findNavController().navigate(R.id.feedFragment)
 
             }
+        }
+
+        binding.btnBack.setOnClickListener {
+            activity?.onBackPressed()
         }
     }
 

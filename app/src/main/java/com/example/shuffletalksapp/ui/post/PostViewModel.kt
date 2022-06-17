@@ -35,14 +35,8 @@ class PostViewModel(private val repository: Repository, postId: String): ViewMod
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    fun updateLike(commentId: String, _like: Like) {
-        val comment = comments.find { comment -> comment.commentId == commentId}
-        val isLikedByCurrentUser = comment?.likes?.any { like -> like.userId == _like.userId}
-        if (isLikedByCurrentUser == true) {
-            comment.likes.removeIf { it.userId == _like.userId }
-        } else {
-            comment?.likes?.add(_like)
-        }
+    fun updateLike(commentId: String, like: Like): Int {
+        return repository.updateLikes(commentId, postId, like)
     }
 
     fun updateComment(newContent: String, commentId: String) {

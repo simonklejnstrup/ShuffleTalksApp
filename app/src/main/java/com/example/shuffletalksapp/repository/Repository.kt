@@ -3,7 +3,9 @@ package com.example.shuffletalksapp.repository
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.example.shuffletalksapp.api.Api
+import com.example.shuffletalksapp.model.Like
 import com.example.shuffletalksapp.model.Post
+import com.example.shuffletalksapp.model.Quote
 import com.example.shuffletalksapp.model.User
 
 class Repository {
@@ -30,12 +32,12 @@ class Repository {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun createComment(content: String, username: String, postId: String) {
-        Api.createComment(content, username, postId)
+    fun createComment(content: String, username: String, postId: String, quotes: Array<Quote>?) {
+        Api.createComment(content, username, postId, quotes)
     }
 
-    fun createUser(user: User) {
-        Api.createUser(user)
+    fun createUser(user: User): String {
+        return Api.createUser(user)
     }
 
     fun updateUser(userId: String, newFirstname: String, newLastname: String, newEmail: String) {
@@ -46,12 +48,9 @@ class Repository {
         Api.updateComment(newContent, commentId, postId)
     }
 
-
-
-
-
-
-
+    fun updateLikes(commentId: String, postid: String, like: Like): Int {
+        return Api.updateLikes(commentId, postid, like)
+    }
 
 
     // FOR USE WITH RETROFIT

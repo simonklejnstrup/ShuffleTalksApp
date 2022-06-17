@@ -1,6 +1,7 @@
 package com.example.shuffletalksapp.ui.profile
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,9 +14,6 @@ import com.example.shuffletalksapp.R
 import com.example.shuffletalksapp.databinding.FragmentProfileBinding
 import com.example.shuffletalksapp.repository.Repository
 import com.example.shuffletalksapp.session.SessionManager
-import com.example.shuffletalksapp.ui.MainActivity
-import com.example.shuffletalksapp.ui.post.PostFragmentArgs
-import com.example.shuffletalksapp.util.Constants
 
 class ProfileFragment: Fragment(R.layout.fragment_profile) {
 
@@ -25,6 +23,8 @@ class ProfileFragment: Fragment(R.layout.fragment_profile) {
 
     private lateinit var binding: FragmentProfileBinding
     private val sessionManager = SessionManager()
+    val args: ProfileFragmentArgs by navArgs()
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,35 +35,80 @@ class ProfileFragment: Fragment(R.layout.fragment_profile) {
         if (!::binding.isInitialized) {
             binding = FragmentProfileBinding.inflate(inflater)
         }
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.btnBack.setOnClickListener {
+            activity?.onBackPressed()
+        }
+
+        Log.d("args.isCurrentUser ", args.isCurrentUser.toString())
+        Log.d("session user ", sessionManager.getUserDetails().get(sessionManager.KEY_USERNAME)!!)
+        if (args.isCurrentUser) {
+            setupFragmentForCurrentUser(view)
+        } else {
+            setupFragmentForOtherUser(view)
+        }
 
 
+
+
+    }
+
+    private fun setupFragmentForOtherUser(view: View) {
+
+        val user: ProfileUIModel? =
+            args.username?.let { viewModel.getUser(it) }
 
         binding.apply {
-            firstnameTextView.text = viewModel.userUIModel?.firstname
-            lastnameTextView.text = viewModel.userUIModel?.lastname
-            usernameTextView.text = viewModel.userUIModel?.username
-            postcountTextView.text = viewModel.userUIModel?.postcount.toString()
-            emailTextView.text = viewModel.userUIModel?.email
+
+            firstnameTextView.text = user?.firstname
+            lastnameTextView.text = user?.lastname
+            usernameTextView.text = user?.username
+            postcountTextView.text = user?.postcount.toString()
+            emailTextView.text = user?.email
 
             Glide.with(view)
-                .load(viewModel.userUIModel?.avatar)
+                .load(user?.avatar)
+                .into(binding.avatarRoundedImageView)
+
+            btnLogout.visibility = View.INVISIBLE
+
+            fab.visibility = View.INVISIBLE
+        }
+    }
+
+    private fun setupFragmentForCurrentUser(view: View) {
+
+        val user: ProfileUIModel =
+            viewModel.getUser(sessionManager.getUserDetails().get(sessionManager.KEY_USERNAME)!!)
+
+        binding.apply {
+
+            firstnameTextView.text = user.firstname
+            lastnameTextView.text = user.lastname
+            usernameTextView.text = user.username
+            postcountTextView.text = user.postcount.toString()
+            emailTextView.text = user.email
+
+            Glide.with(view)
+                .load(user.avatar)
                 .into(binding.avatarRoundedImageView)
 
             btnLogout.setOnClickListener {
                 sessionManager.logoutUser()
                 findNavController().navigate(R.id.loginFragment)
             }
+
             fab.setOnClickListener {
                 findNavController().navigate(R.id.editProfileFragment)
 
             }
-        }
 
+        }
     }
 }

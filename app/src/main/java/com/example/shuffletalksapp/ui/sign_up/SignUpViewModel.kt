@@ -21,7 +21,7 @@ class SignUpViewModel(private val repository: Repository): ViewModel() {
                    lastname: String,
                    email: String,
                    city: String,
-                   password: String) {
+                   password: String): String {
         val user = User (
             UUID.randomUUID().toString(),
             username,
@@ -35,7 +35,7 @@ class SignUpViewModel(private val repository: Repository): ViewModel() {
             R.drawable.icon_app_round
         )
 
-        repository.createUser(user)
+        return repository.createUser(user)
 
     }
 }

@@ -1,29 +1,24 @@
 package com.example.shuffletalksapp.ui.post
 
-import android.content.Context
 import android.graphics.Typeface
 import android.text.TextUtils
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.setMargins
-import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.shuffletalksapp.R
 import com.example.shuffletalksapp.databinding.ItemPostBinding
 import com.example.shuffletalksapp.model.Like
+import com.example.shuffletalksapp.model.Quote
 import com.example.shuffletalksapp.session.SessionManager
-import com.example.shuffletalksapp.util.Constants
 
 class PostRecyclerViewAdapter(
-    private var onLikeButtonClicked: ((commentId: String, userId: String) -> Unit),
-    private var onItemClicked: ((commentId: String) -> Unit),
+    private var onLikeButtonClicked: ((commentId: String, userId: String, position: Int) -> Unit),
+    private var onItemClicked: ((quoteList: Array<Quote>, itemUsername: String) -> Unit),
     private var onAvatarClicked: ((username: String) -> Unit),
     private var onPostUpdated: ((newContent: String, commentId: String) -> Unit),
     private val userId: String
@@ -31,7 +26,7 @@ class PostRecyclerViewAdapter(
 
     private var comments = ArrayList<PostItemUIModel>()
     private val sessionManager = SessionManager()
-    private var likeFlag = false
+    private var isLiked = false
     private val currentUserId = sessionManager.getUserDetails()?.get(sessionManager.KEY_USERID)
     private val currentUsername = sessionManager.getUserDetails()?.get(sessionManager.KEY_USERNAME)
 
@@ -50,8 +45,9 @@ class PostRecyclerViewAdapter(
     }
 
 
-    override fun onBindViewHolder(holder: PostRecyclerViewAdapter.ViewHolder, position: Int) {
-        holder.bind(comments[position])
+    override fun onBindViewHolder(holder: PostRecyclerViewAdapter.ViewHolder,
+                                  position: Int) {
+        holder.bind(comments[position], position)
     }
 
     override fun getItemCount(): Int {
@@ -68,11 +64,14 @@ class PostRecyclerViewAdapter(
         notifyDataSetChanged()
     }
 
+
     inner class ViewHolder(private val postBinding: ItemPostBinding) :
         RecyclerView.ViewHolder(postBinding.root) {
-        fun bind(model: PostItemUIModel) {
+        fun bind(model: PostItemUIModel,
+                 position: Int) {
 
             postBinding.apply {
+
                 usernameTextView.text = model.username
                 postCountTextView.text = model.postcount.toString()
                 createdAtTextView.text = model.createdAt
@@ -81,14 +80,6 @@ class PostRecyclerViewAdapter(
                 Glide.with(this.root)
                     .load(model.avatar)
                     .into(postBinding.avatarRoundedImageView)
-
-                if (model.likes.size == 0) {
-                    likesCounterTextView.visibility = View.INVISIBLE
-                }
-                if (model.likes.size > 0) {
-                    likesCounterTextView.visibility = View.VISIBLE
-                    likesCounterTextView.text = model.likes.size.toString()
-                }
 
                 // Setup edit button if session user equals author of post
                 if (currentUserId == model.userId) {
@@ -117,9 +108,11 @@ class PostRecyclerViewAdapter(
                     }
                 }
 
+                // Handle quotes
                 if (model.quotes.size > 0) {
                     postBinding.apply {
                         quoteContainer.visibility = View.VISIBLE
+                        quoteContainer.removeAllViews()
                         for (quote in model.quotes) {
                             val layout = LinearLayout(itemView.context)
                             val params = LinearLayout.LayoutParams(
@@ -127,15 +120,15 @@ class PostRecyclerViewAdapter(
                                 LinearLayout.LayoutParams.WRAP_CONTENT)
                             layout.layoutParams = params
                             layout.orientation = LinearLayout.HORIZONTAL
+                            layout.setPadding(20,0,15,15)
 
                             val authorTextView = TextView(itemView.context)
                             authorTextView.text = quote.username
                             authorTextView.setTypeface(null, Typeface.BOLD)
-                            authorTextView.setPadding(4, 4, 4, 4) // virker ikke
+                            authorTextView.setPadding(0, 0, 10, 0)
 
                             val contentTextView = TextView(itemView.context)
                             contentTextView.text = quote.text
-                            contentTextView.setPadding(4, 4, 4, 4) // virker ikke
                             contentTextView.maxLines = 5
                             contentTextView.ellipsize = TextUtils.TruncateAt.END
 
@@ -146,56 +139,84 @@ class PostRecyclerViewAdapter(
                         }
 
                     }
+                } else {
+                    quoteContainer.visibility = View.GONE
                 }
 
                 // Show author tag if user == OP
                 if (model.userId == comments[0].userId) {
                     postBinding.opTextView.visibility = View.VISIBLE
+                } else {
+                    postBinding.opTextView.visibility = View.GONE
                 }
 
-
-                // Set like button
-                var isLiked = model.likes.any { like -> like.userId == userId }
+                // Setup like button for currentuser
+                isLiked = model.likes.any { like -> like.userId == currentUserId }
                 if (isLiked) {
                     btnLikeImageView.setImageResource(R.drawable.btn_like_active)
                 } else {
                     btnLikeImageView.setImageResource(R.drawable.btn_like_inactive)
                 }
 
+                if (model.likes.size == 0) {
+                    likesCounterLayout.visibility = View.GONE
+                }
+                if (model.likes.size > 0) {
+                    likesCounterLayout.visibility = View.VISIBLE
+                    likesCounterTextView.visibility = View.VISIBLE
+                    likesCounterTextView.text = model.likes.size.toString()
+                }
 
                 btnLike.setOnClickListener {
 
+                    if (sessionManager.isLoggedIn()) {
+                        if (isLiked) {
+                            btnLikeImageView.setImageResource(R.drawable.btn_like_inactive)
+                        } else {
+                            btnLikeImageView.setImageResource(R.drawable.btn_like_active)
+                        }
+
+                    }
+
                     onLikeButtonClicked(
                         model.commentId,
-                        userId
+                        userId,
+                        position
                     )
-
-                    if (isLiked) {
-                        btnLikeImageView.setImageResource(R.drawable.btn_like_active)
-                    } else {
-                        btnLikeImageView.setImageResource(R.drawable.btn_like_inactive)
-                    }
-                    isLiked = !isLiked
                 }
 
-                // TODO: show quotes if there are any
-                // commentCountTextView.text = model.commentCount
 
                 // OnclickListener for the whole Card
                 root.setOnClickListener {
-                    onItemClicked(model.commentId)
+                    if (sessionManager.isLoggedIn()) {
+                        val quoteList = ArrayList<Quote>()
+                        for (quote in model.quotes) {
+                            quoteList.add(quote)
+                        }
+                        quoteList.add(Quote(
+                            model.commentId,
+                            model.username,
+                            model.userId,
+                            model.content
+                        ))
+
+                        val quoteArray = quoteList.toTypedArray()
+
+                        onItemClicked(quoteArray, model.username)
+
+                    }
                 }
 
+                // OnclickListener for avatar
                 avatarRoundedImageView.setOnClickListener {
-                    println(userId)
-
-                    //onAvatarClicked(model.username)
+                    onAvatarClicked(model.username)
                 }
 
             }
 
 
         }
+
 
 
     }

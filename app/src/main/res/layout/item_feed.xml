@@ -30,6 +30,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <TextView
+                android:id="@+id/numberOfPostsTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/number_of_posts"
+                android:textColor="@color/card_btn_background"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:layout_margin="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+
             <com.makeramen.roundedimageview.RoundedImageView
                 android:id="@+id/avatarRoundedImageView"
                 android:layout_width="50dp"
@@ -115,6 +128,7 @@
                 android:fontFamily="@font/heebo"
                 android:text="Dette er en post\nPå mange linjer"
                 android:textColor="@color/black"
+                android:textStyle="bold"
                 android:maxLines="8"
                 android:ellipsize="end"
                 app:layout_constraintBottom_toBottomOf="parent"

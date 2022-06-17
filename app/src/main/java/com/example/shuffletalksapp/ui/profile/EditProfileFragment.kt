@@ -23,6 +23,7 @@ class EditProfileFragment: Fragment(R.layout.fragment_edit_profile) {
         ProfileViewModelFactory(Repository())
     }
 
+    private val sessionManager = SessionManager()
     private lateinit var binding: FragmentEditProfileBinding
 
     override fun onCreateView(
@@ -40,28 +41,46 @@ class EditProfileFragment: Fragment(R.layout.fragment_edit_profile) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val username = sessionManager.getUserDetails().get(sessionManager.KEY_USERNAME)
+        val user = username?.let { viewModel.getUser(it) }
+
         binding.apply {
-            firstnameEditText.setText(viewModel.userUIModel?.firstname)
-            lastnameEditText.setText(viewModel.userUIModel?.lastname)
-            emailEditText.setText(viewModel.userUIModel?.email)
+
+            firstnameEditText.setText(user?.firstname)
+            lastnameEditText.setText(user?.lastname)
+            emailEditText.setText(user?.email)
             Glide.with(view)
-                .load(viewModel.userUIModel?.avatar)
+                .load(user?.avatar)
                 .into(binding.avatarRoundedImageView)
+
         }
 
-        binding.fab.setOnClickListener {
+        initOnClickListeners()
 
-            val newFirstname = binding.firstnameEditText.text.toString().trim()
-            val newLastname = binding.lastnameEditText.text.toString().trim()
-            val newEmail  = binding.emailEditText.text.toString().trim()
 
-            viewModel.updateUser(newFirstname, newLastname, newEmail)
+    }
 
-            Toast.makeText(view.context, "Bruger opdateret", Toast.LENGTH_SHORT).show()
+    private fun initOnClickListeners() {
+        binding.apply {
+            fab.setOnClickListener {
 
-            Handler(Looper.getMainLooper()).postDelayed({
-                findNavController().navigate(R.id.profileFragment)
-            }, 2000)
+                val newFirstname = binding.firstnameEditText.text.toString().trim()
+                val newLastname = binding.lastnameEditText.text.toString().trim()
+                val newEmail  = binding.emailEditText.text.toString().trim()
+
+                viewModel.updateUser(newFirstname, newLastname, newEmail)
+
+                Toast.makeText(view?.context, "Bruger opdateret", Toast.LENGTH_SHORT).show()
+
+                Handler(Looper.getMainLooper()).postDelayed({
+                    findNavController().navigate(R.id.profileFragment)
+                }, 2000)
+            }
+
+            btnBack.setOnClickListener {
+                activity?.onBackPressed()
+            }
         }
+
     }
 }
